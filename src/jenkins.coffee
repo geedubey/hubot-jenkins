@@ -207,9 +207,21 @@ jenkinsList = (msg) ->
 
 module.exports = (robot) ->
   robot.respond /j(?:enkins)? build ([\w\.\-_ ]+)(, (.+))?/i, (msg) ->
+    role = 'devops'
+    user = robot.brain.userForName(msg.message.user.name)
+    return msg.send "#{name} does not exist" unless user?
+    unless robot.auth.hasRole(user, role)
+        msg.send "Access Denied. You need role #{role} to perform this action."
+        return
     jenkinsBuild(msg, false)
 
   robot.respond /j(?:enkins)? b (\d+)/i, (msg) ->
+    role = 'devops'
+    user = robot.brain.userForName(msg.message.user.name)
+    return msg.send "#{name} does not exist" unless user?
+    unless robot.auth.hasRole(user, role)
+        msg.send "Access Denied. You need role #{role} to perform this action."
+        return
     jenkinsBuildById(msg)
 
   robot.respond /j(?:enkins)? list( (.+))?/i, (msg) ->
